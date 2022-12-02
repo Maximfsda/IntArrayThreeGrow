@@ -18,6 +18,7 @@ public class MyArrayList implements IntList {
 
     @Override
     public Integer add(int index, Integer item) {
+        grownIfNeeded();
         checkItem(item);
 
         if (index < 0 || index > size) {
@@ -165,16 +166,37 @@ public class MyArrayList implements IntList {
     }
 
     private void sort(int [] array){
-        for (int i = 1; i < array.length; i++) {
-            int tmp = array[i];
-            int j = i;
-            while (j>0 && array[j-1] >= tmp){
-                array[i] = array[j-1];
-                j--;
-            }
-            array[j]= tmp;
+        quickSort(array,0,array.length -1);
+    }
+    public static void quickSort(int[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
         }
     }
+    private static int partition(int[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+    private static void swapElements(int[] arr, int i1, int i2) {
+        int temp = arr[i1];
+        arr[i1] = arr[i2];
+        arr[i2] = temp;
+    }
+
     private int binarySearch(int[] array,int element){
         int min = 0;
         int max = array.length - 1;
